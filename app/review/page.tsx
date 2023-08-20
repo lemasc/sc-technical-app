@@ -6,11 +6,6 @@ import ImageDialog from "./ImageDialog";
 import { refreshFolder, reviewPhotoStore, setFolder } from "./store";
 import Thumbnail from "./Thumbnail";
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
-import { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "SC Photo Review",
-};
 
 const ListPage = () => {
   const selectedFolder = reviewPhotoStore((state) => state.selectedFolder);
