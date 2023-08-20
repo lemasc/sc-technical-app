@@ -79,12 +79,12 @@ export default function ImageDialog({ images }: { images: string[] }) {
           />
         </div>
         {currentPhoto && (
-          <div className="flex-shrink-0 flex flex-col w-full max-w-sm p-8 gap-2 h-screen bg-white bg-opacity-10 rounded-l-xl">
+          <div className="max-h-screen overflow-y-auto flex-shrink-0 flex flex-col w-full max-w-md p-8 gap-2 h-screen bg-white bg-opacity-10 rounded-l-xl">
             <span className="text-gray-400">
               Image {index + 1} of {images.length}
             </span>
             <h2 className="font-bold text-3xl">{currentPhoto.file.name}</h2>
-            <ImageReview image={currentPhoto} />
+            <ImageReview key={currentPhoto.file.name} image={currentPhoto} />
             {currentPhoto.metadata && (
               <ImageMetadata metadata={currentPhoto.metadata} />
             )}

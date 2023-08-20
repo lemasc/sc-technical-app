@@ -1,6 +1,8 @@
+import { forwardRef } from "react";
+
 type ButtonVariant = "outline" | "primary";
 
-type ButtonProps = {
+export type ButtonProps = {
   className: Record<ButtonVariant | "hover", string>;
   variant: ButtonVariant;
   Icon: React.ForwardRefExoticComponent<
@@ -9,21 +11,20 @@ type ButtonProps = {
       titleId?: string;
     } & React.RefAttributes<SVGSVGElement>
   >;
-} & Omit<React.HTMLAttributes<HTMLButtonElement>, "className">;
+  children: React.ReactNode;
+};
 
-export const Button = ({
-  variant,
-  className,
-  Icon,
-  children,
-  ...props
-}: ButtonProps) => {
+export const Button = forwardRef<
+  HTMLButtonElement,
+  ButtonProps & Omit<React.HTMLAttributes<HTMLButtonElement>, "className">
+>(function Button({ variant, className, Icon, children, ...props }, ref) {
   return (
     <button
+      ref={ref}
       className={`px-6 py-3 rounded-lg text-sm font-medium transition-colors ${className[variant]} ${className["hover"]}`}
       {...props}
     >
       {Icon && <Icon className="w-5 h-5 mr-1 -mt-1 inline" />} {children}
     </button>
   );
-};
+});

@@ -25,15 +25,15 @@ const Thumbnail = ({ file }: { file: string }) => {
   }, [fileHandle]);
 
   return (
-    <div className="w-[360px] h-[240px] rounded-lg flex flex-col justify-center bg-white">
+    <div className="rounded-lg flex flex-col justify-center bg-white">
       {url && (
         <div>
           <Image
-            className="transform rounded-lg brightness-90 transition will-change-auto group-hover:brightness-100 group-hover:contrast-120"
+            className="transform aspect-[3/2] object-scale-down rounded-lg brightness-90 transition will-change-auto group-hover:brightness-100 group-hover:contrast-120"
             src={url}
             alt="Thumbnail"
-            width={360}
-            height={240}
+            width={720}
+            height={480}
           />
         </div>
       )}

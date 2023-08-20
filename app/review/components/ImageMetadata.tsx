@@ -2,9 +2,11 @@ import { ExifMetadataType } from "../ExifMetadata";
 
 export const ImageMetadata = ({ metadata }: { metadata: ExifMetadataType }) => {
   return (
-    <div className="flex flex-col flex-grow justify-end text-sm">
+    <div className="flex flex-col flex-grow justify-end text-sm flex-shrink-0">
       <div className="grid grid-cols-[max-content,1fr] gap-2 py-4">
-        <b>Camera:</b>
+        <b>Camera Make:</b>
+        <span>{metadata.Make}</span>
+        <b>Camera Model:</b>
         <span>{metadata.Model}</span>
         <b className="mr-1">Date Time Taken:</b>
         <span>{metadata.DateTimeOriginal.toLocaleString()}</span>

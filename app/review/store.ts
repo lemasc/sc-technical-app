@@ -3,9 +3,9 @@ import { parse, ValiError } from "valibot";
 import { create } from "zustand";
 import { ExifMetadata, ExifMetadataType } from "./ExifMetadata";
 
-type PhotoReview = {
+export type PhotoReview = {
   status: "approved" | "rejected" | "needs-editing";
-  comment: string;
+  reason?: string;
 };
 
 export type PhotoEntry = {
@@ -61,7 +61,6 @@ export const createMetadata = async (entry: PhotoEntry) => {
   try {
     const blob = await entry.file.getFile();
     const rawMetadata = EXIF.readFromBinaryFile(await blob.arrayBuffer());
-    console.log(rawMetadata);
     const metadata = parse(ExifMetadata, rawMetadata);
     return metadata;
   } catch (e) {

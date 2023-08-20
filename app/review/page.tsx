@@ -32,11 +32,11 @@ const ListPage = () => {
     <div>
       <ImageDialog images={photoEntryKeys} />
       <nav className="p-4 border-b border-gray-600 flex flex-row gap-4 items-center">
-        <Image src="/logo_sc.png" width={56} height={56} alt="Logo" />
+        <Image priority src="/logo_sc.png" width={56} height={56} alt="Logo" />
         <h1 className="font-bold text-lg">Photo Review</h1>
         <div className="flex-grow flex flex-row justify-end items-center gap-4">
           {selectedFolder && (
-            <span>
+            <span className="font-thai">
               <b>Folder:</b> {selectedFolder?.name}
             </span>
           )}
@@ -49,7 +49,7 @@ const ListPage = () => {
           </button>
         </div>
       </nav>
-      <main className="flex flex-row gap-2 flex-wrap p-4">
+      <main className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 flex-wrap p-4">
         {photoEntryKeys.map((file) => (
           <button
             key={file}
