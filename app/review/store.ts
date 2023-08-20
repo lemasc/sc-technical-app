@@ -1,12 +1,18 @@
+import EXIF from "exif-js";
+import { parse, ValiError } from "valibot";
 import { create } from "zustand";
+import { ExifMetadata, ExifMetadataType } from "./ExifMetadata";
+
 type PhotoReview = {
   status: "approved" | "rejected" | "needs-editing";
   comment: string;
 };
+
 export type PhotoEntry = {
   file: FileSystemFileHandle;
   review: PhotoReview | null;
   objectUrl: string | null;
+  metadata?: ExifMetadataType;
 };
 export type ReviewPhotoStoreType = {
   selectedFolder: FileSystemDirectoryHandle | null;
@@ -51,24 +57,26 @@ export const refreshFolder = async (folder?: FileSystemDirectoryHandle) => {
   reviewPhotoStore.setState({ photoEntries: newEntries });
 };
 
-export const createObjectUrl = async (entry: PhotoEntry) => {
-  const objectUrl = URL.createObjectURL(await entry.file.getFile());
-  reviewPhotoStore.setState({
-    photoEntries: new Map(reviewPhotoStore.getState().photoEntries).set(
-      entry.file.name,
-      { ...entry, objectUrl }
-    ),
-  });
-  return objectUrl;
+export const createMetadata = async (entry: PhotoEntry) => {
+  try {
+    const blob = await entry.file.getFile();
+    const rawMetadata = EXIF.readFromBinaryFile(await blob.arrayBuffer());
+    console.log(rawMetadata);
+    const metadata = parse(ExifMetadata, rawMetadata);
+    return metadata;
+  } catch (e) {
+    if (e instanceof ValiError) {
+      console.error(e.issues);
+    }
+    throw e;
+  }
 };
 
-export const revokeObjectUrl = async (entry: PhotoEntry) => {
-  if (!entry.objectUrl) return;
-  URL.revokeObjectURL(entry.objectUrl);
+export const setPhotoEntry = async (entry: PhotoEntry) => {
   reviewPhotoStore.setState({
     photoEntries: new Map(reviewPhotoStore.getState().photoEntries).set(
       entry.file.name,
-      { ...entry, objectUrl: null }
+      entry
     ),
   });
 };

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
-import { createObjectUrl, reviewPhotoStore, revokeObjectUrl } from "./store";
+import { createMetadata, reviewPhotoStore, setPhotoEntry } from "./store";
 
 const Thumbnail = ({ file }: { file: string }) => {
   const [url, setUrl] = useState<string | null>(null);
@@ -14,7 +14,13 @@ const Thumbnail = ({ file }: { file: string }) => {
     if (fileHandle.objectUrl) {
       setUrl(fileHandle.objectUrl);
     } else {
-      createObjectUrl(fileHandle).then((url) => setUrl(url));
+      (async () => {
+        const entry = fileHandle;
+        const blob = await fileHandle.file.getFile();
+        entry.objectUrl = URL.createObjectURL(blob);
+        setUrl(entry.objectUrl);
+        setPhotoEntry(entry);
+      })();
     }
   }, [fileHandle]);
 

@@ -2,9 +2,11 @@ import useKeypress from "@/utils/useKeyPress";
 import { Dialog } from "@headlessui/react";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ImageMetadata } from "./components/ImageMetadata";
+import { ImageReview } from "./components/ImageReview";
 import SharedModal from "./SharedModal";
-import { reviewPhotoStore } from "./store";
+import { createMetadata, reviewPhotoStore, setPhotoEntry } from "./store";
 
 export default function ImageDialog({ images }: { images: string[] }) {
   const selectedFile = reviewPhotoStore((state) => state.selectedFile);
@@ -40,6 +42,14 @@ export default function ImageDialog({ images }: { images: string[] }) {
     selectedFile ? state.photoEntries.get(selectedFile) : undefined
   );
 
+  useEffect(() => {
+    if (currentPhoto && !currentPhoto.metadata) {
+      createMetadata(currentPhoto).then((metadata) => {
+        setPhotoEntry({ ...currentPhoto, metadata });
+      });
+    }
+  }, [currentPhoto]);
+
   if (!selectedFile) return null;
 
   return (
@@ -58,13 +68,29 @@ export default function ImageDialog({ images }: { images: string[] }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
       />
-      <SharedModal
-        index={index}
-        images={images}
-        changePhotoId={changePhotoId}
-        closeModal={handleClose}
-        currentPhoto={currentPhoto}
-      />
+      <div className="relative z-50 w-full flex items-center flex-row">
+        <div className="flex-grow flex-shrink basis-3/4 p-10">
+          <SharedModal
+            index={index}
+            images={images}
+            changePhotoId={changePhotoId}
+            closeModal={handleClose}
+            currentPhoto={currentPhoto}
+          />
+        </div>
+        {currentPhoto && (
+          <div className="flex-shrink-0 flex flex-col w-full max-w-sm p-8 gap-2 h-screen bg-white bg-opacity-10 rounded-l-xl">
+            <span className="text-gray-400">
+              Image {index + 1} of {images.length}
+            </span>
+            <h2 className="font-bold text-3xl">{currentPhoto.file.name}</h2>
+            <ImageReview image={currentPhoto} />
+            {currentPhoto.metadata && (
+              <ImageMetadata metadata={currentPhoto.metadata} />
+            )}
+          </div>
+        )}
+      </div>
     </Dialog>
   );
 }

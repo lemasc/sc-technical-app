@@ -1,11 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import React from "react";
+import Image from "next/image";
 import ImageDialog from "./ImageDialog";
 import { refreshFolder, reviewPhotoStore, setFolder } from "./store";
 import Thumbnail from "./Thumbnail";
+import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "SC Photo Review",
+};
 
 const ListPage = () => {
   const selectedFolder = reviewPhotoStore((state) => state.selectedFolder);
@@ -26,10 +31,25 @@ const ListPage = () => {
   return (
     <div>
       <ImageDialog images={photoEntryKeys} />
-      <h1>Photo Gallery</h1>
-      <span>Folder: {selectedFolder?.name}</span>
-      <button onClick={handleSelectFolder}>Select Folder</button>
-      <div className="flex flex-row gap-2 flex-wrap">
+      <nav className="p-4 border-b border-gray-600 flex flex-row gap-4 items-center">
+        <Image src="/logo_sc.png" width={56} height={56} alt="Logo" />
+        <h1 className="font-bold text-lg">Photo Review</h1>
+        <div className="flex-grow flex flex-row justify-end items-center gap-4">
+          {selectedFolder && (
+            <span>
+              <b>Folder:</b> {selectedFolder?.name}
+            </span>
+          )}
+          <button
+            className="rounded text-sm bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 font-medium"
+            onClick={handleSelectFolder}
+          >
+            <CloudArrowUpIcon className="h-6 w-6 inline-block mr-1" />
+            Select Folder
+          </button>
+        </div>
+      </nav>
+      <main className="flex flex-row gap-2 flex-wrap p-4">
         {photoEntryKeys.map((file) => (
           <button
             key={file}
@@ -41,7 +61,7 @@ const ListPage = () => {
             <Thumbnail file={file} />
           </button>
         ))}
-      </div>
+      </main>
     </div>
   );
 };
