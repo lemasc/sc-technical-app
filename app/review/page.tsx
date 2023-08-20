@@ -29,10 +29,16 @@ const ListPage = () => {
       <nav className="p-4 border-b border-gray-600 flex flex-row gap-4 items-center">
         <Image priority src="/logo_sc.png" width={56} height={56} alt="Logo" />
         <h1 className="font-bold text-lg">Photo Review</h1>
-        <div className="flex-grow flex flex-row justify-end items-center gap-4">
+        <div className="flex flex-row justify-center flex-grow gap-2"></div>
+        <div className="flex flex-row justify-end items-center gap-4">
           {selectedFolder && (
-            <span className="font-thai">
-              <b>Folder:</b> {selectedFolder?.name}
+            <span className="font-thai flex flex-col text-right">
+              <span>
+                <b>Folder:</b> {selectedFolder?.name}
+              </span>
+              <span className="text-sm py-0.5 text-gray-300">
+                {photoEntryKeys.length} images
+              </span>
             </span>
           )}
           <button
