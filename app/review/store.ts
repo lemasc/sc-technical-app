@@ -18,12 +18,14 @@ export type ReviewPhotoStoreType = {
   selectedFolder: FileSystemDirectoryHandle | null;
   photoEntries: Map<string, PhotoEntry>;
   selectedFile: string | null;
+  changesDate: Date;
 };
 
 export const reviewPhotoStore = create<ReviewPhotoStoreType>((set, get) => ({
   selectedFolder: null,
   photoEntries: new Map(),
   selectedFile: null,
+  changesDate: new Date(),
 }));
 
 export const setFolder = async (folder: FileSystemDirectoryHandle) => {

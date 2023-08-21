@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Image from "next/image";
 import ImageDialog from "./ImageDialog";
 import { refreshFolder, reviewPhotoStore, setFolder } from "./store";
@@ -22,6 +22,27 @@ const ListPage = () => {
       console.error("Error selecting folder:", error);
     }
   };
+
+  useEffect(() =>
+    reviewPhotoStore.subscribe((state) => {
+      if (state.selectedFolder && state.photoEntries) {
+        const key = `edit-${state.selectedFolder.name}`;
+        const existingChanges = JSON.parse(localStorage.getItem(key) ?? "{}");
+        const entries = Array.from(state.photoEntries.entries());
+        const changes = {
+          ...existingChanges,
+          [state.changesDate.toLocaleString()]: Object.fromEntries(
+            entries.map(([k, { review, metadata }]) => [
+              k,
+              { review, metadata },
+            ])
+          ),
+        };
+        console.log("✏️ Changes", changes);
+        localStorage.setItem(key, JSON.stringify(changes));
+      }
+    })
+  );
 
   return (
     <div>
