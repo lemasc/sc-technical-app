@@ -1,5 +1,6 @@
 import useKeypress from "@/utils/useKeyPress";
 import { Dialog } from "@headlessui/react";
+import { XMarkIcon } from "@heroicons/react/20/solid";
 import { motion } from "framer-motion";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -58,7 +59,7 @@ export default function ImageDialog({ images }: { images: string[] }) {
       open={true}
       onClose={() => {}}
       initialFocus={overlayRef}
-      className="fixed inset-0 z-10 flex items-center justify-center"
+      className="fixed inset-0 z-10 flex items-center justify-center text-white"
     >
       <Dialog.Overlay
         ref={overlayRef}
@@ -79,7 +80,15 @@ export default function ImageDialog({ images }: { images: string[] }) {
           />
         </div>
         {currentPhoto && (
-          <div className="max-h-screen overflow-y-auto flex-shrink-0 flex flex-col w-full max-w-md p-8 gap-2 h-screen bg-white bg-opacity-10 rounded-l-xl">
+          <div className="relative max-h-screen overflow-y-auto flex-shrink-0 flex flex-col w-full max-w-md p-8 gap-2 h-screen bg-white bg-opacity-10 rounded-l-xl">
+            <div className="absolute top-0 right-0 flex items-center gap-2 p-6 text-white">
+              <button
+                onClick={() => handleClose()}
+                className="rounded-full bg-black/50 p-2 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white"
+              >
+                <XMarkIcon className="h-7 w-7" />
+              </button>
+            </div>
             <span className="text-gray-400">
               Image {index + 1} of {images.length}
             </span>

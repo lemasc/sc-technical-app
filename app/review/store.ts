@@ -39,7 +39,12 @@ export const refreshFolder = async (folder?: FileSystemDirectoryHandle) => {
   const previousEntries = reviewPhotoStore.getState().photoEntries;
   const newEntries = new Map();
   for await (const entry of folder.values()) {
-    if (entry.kind === "file" && entry.name.toLowerCase().endsWith(".jpg")) {
+    const name = entry.name.toLowerCase();
+    if (
+      entry.kind === "file" &&
+      name.endsWith(".jpg") &&
+      !name.startsWith("._")
+    ) {
       const previousEntry = previousEntries.get(entry.name);
       if (previousEntry) {
         if (await previousEntry.file.isSameEntry(entry)) {
