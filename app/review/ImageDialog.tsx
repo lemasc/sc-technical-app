@@ -2,7 +2,6 @@ import useKeypress from "@/utils/useKeyPress";
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { motion } from "framer-motion";
-import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ImageMetadata } from "./components/ImageMetadata";
 import { ImageReview } from "./components/ImageReview";
@@ -12,9 +11,7 @@ import { createMetadata, reviewPhotoStore, setPhotoEntry } from "./store";
 export default function ImageDialog({ images }: { images: string[] }) {
   const selectedFile = reviewPhotoStore((state) => state.selectedFile);
   let overlayRef = useRef<HTMLDivElement | null>(null);
-  const router = useRouter();
 
-  const params = useSearchParams();
   const index = useMemo(
     () => images.findIndex((image) => image === selectedFile),
     [images, selectedFile]
@@ -51,7 +48,7 @@ export default function ImageDialog({ images }: { images: string[] }) {
     }
   }, [currentPhoto]);
 
-  if (!selectedFile) return null;
+  if (!currentPhoto) return null;
 
   return (
     <Dialog

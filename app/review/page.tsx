@@ -6,6 +6,7 @@ import ImageDialog from "./ImageDialog";
 import { refreshFolder, reviewPhotoStore, setFolder } from "./store";
 import Thumbnail from "./Thumbnail";
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
+import ReviewOptions from "./components/ReviewOptions";
 
 const ListPage = () => {
   const selectedFolder = reviewPhotoStore((state) => state.selectedFolder);
@@ -15,7 +16,10 @@ const ListPage = () => {
 
   const handleSelectFolder = async () => {
     try {
-      const fileHandle = await window.showDirectoryPicker();
+      const fileHandle = await window.showDirectoryPicker({
+        // @ts-ignore
+        id: "openFolder",
+      });
       await setFolder(fileHandle);
       await refreshFolder(fileHandle);
     } catch (error) {
@@ -23,25 +27,24 @@ const ListPage = () => {
     }
   };
 
-  useEffect(() =>
-    reviewPhotoStore.subscribe((state) => {
-      if (state.selectedFolder && state.photoEntries) {
-        const key = `edit-${state.selectedFolder.name}`;
-        const existingChanges = JSON.parse(localStorage.getItem(key) ?? "{}");
-        const entries = Array.from(state.photoEntries.entries());
-        const changes = {
-          ...existingChanges,
-          [state.changesDate.toLocaleString()]: Object.fromEntries(
-            entries.map(([k, { review, metadata }]) => [
-              k,
-              { review, metadata },
-            ])
-          ),
-        };
-        console.log("✏️ Changes", changes);
-        localStorage.setItem(key, JSON.stringify(changes));
-      }
-    })
+  useEffect(
+    () =>
+      reviewPhotoStore.subscribe((state) => {
+        if (state.selectedFolder && state.photoEntries) {
+          const key = `edit-${state.selectedFolder.name}`;
+          const existingChanges = JSON.parse(localStorage.getItem(key) ?? "{}");
+          const entries = Array.from(state.photoEntries.entries());
+          const changes = {
+            ...existingChanges,
+            [state.changesDate.toLocaleString()]: entries.map(
+              ([k, { review, metadata }]) => [k, { review, metadata }]
+            ),
+          };
+          console.log("✏️ Changes", changes);
+          localStorage.setItem(key, JSON.stringify(changes));
+        }
+      }),
+    []
   );
 
   return (
@@ -53,14 +56,17 @@ const ListPage = () => {
         <div className="flex flex-row justify-center flex-grow gap-2"></div>
         <div className="flex flex-row justify-end items-center gap-4">
           {selectedFolder && (
-            <span className="font-thai flex flex-col text-right">
-              <span>
-                <b>Folder:</b> {selectedFolder?.name}
+            <>
+              <span className="font-thai flex flex-col text-right">
+                <span>
+                  <b>Folder:</b> {selectedFolder?.name}
+                </span>
+                <span className="text-sm py-0.5 text-gray-300">
+                  {photoEntryKeys.length} images
+                </span>
               </span>
-              <span className="text-sm py-0.5 text-gray-300">
-                {photoEntryKeys.length} images
-              </span>
-            </span>
+              <ReviewOptions />
+            </>
           )}
           <button
             className="rounded text-sm bg-blue-500 text-white hover:bg-blue-600 px-4 py-2 font-medium"

@@ -53,23 +53,23 @@ export const ImageReview = ({ image }: { image: PhotoEntry }) => {
           {
             key: "overexposed",
             title: "Overexposed",
-            description: "The image is too bright.",
+            description: "รูปภาพสว่างเกินไป",
           },
           {
             key: "underexposed",
             title: "Underexposed",
-            description: "The image is too dark.",
+            description: "รูปภาพมืดเกินไป",
           },
           {
             key: "bad-white-balance",
             title: "Bad White Balance",
             description:
-              "The image has a bad white balance. (Too blue or red.)",
+              "สมดุลสีขาวของภาพไม่ดี ภาพดูเย็นเกินไป (ฟ้าไป) หรืออุ่นเกินไป (แดงไป)",
           },
           {
             key: "crop-or-rotate",
             title: "Crop or Rotate",
-            description: "The image needs to be cropped or rotated.",
+            description: "รูปภาพนี้จำเป็นต้องมีการครอปหรือหมุนภาพ",
           },
         ]}
         image={image}
@@ -91,30 +91,30 @@ export const ImageReview = ({ image }: { image: PhotoEntry }) => {
             key: "repetitive",
             title: "Repetitive",
             description:
-              "The image is too similar to other images in the collection.",
+              "รูปภาพนี้คล้ายคลึงหรือซ้ำกับรูปอื่น ๆ ใน Collection นี้",
           },
           {
             key: "bad-shooting",
             title: "Bad Shooting",
             description:
-              "The image is poorly shot. (Bad focus, bad lightning, etc.)",
+              "รูปภาพนี้ถ่ายไม่ดีจนไม่สามารถแก้ไขได้ (ภาพเบลอเนื่องจากหลุดโฟกัส แสงไม่ดี ฯลฯ)",
           },
           {
             key: "bad-composition",
             title: "Bad Composition",
-            description: "The image is poorly composed.",
+            description: "รูปภาพนี้องค์ประกอบไม่ดี",
           },
           {
             key: "bad-subject",
             title: "Bad Subject",
             description:
-              "The image has a bad subject. (Subject is blurred, unintended behavior, etc.)",
+              "ภาพนี้มีจุดเด่นหรือจุดสนใจที่ไม่ดี (จุดสนใจเบลอ จุดสนใจมีลักษณะหรือท่าทางไม่เหมาะสม ฯลฯ)",
           },
           {
             key: "not-meaningful",
             title: "Not Meaningful",
             description:
-              "The image is not meaningful and doesn't add value to the collection.",
+              "รูปภาพนี้ไม่ได้เพิ่มคุณค่าหรืออธิบายบรรยากาศของกิจกรรม",
           },
         ]}
         image={image}

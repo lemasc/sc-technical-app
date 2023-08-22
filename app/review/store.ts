@@ -38,6 +38,7 @@ export const refreshFolder = async (folder?: FileSystemDirectoryHandle) => {
   }
   const previousEntries = reviewPhotoStore.getState().photoEntries;
   const newEntries = new Map();
+
   for await (const entry of folder.values()) {
     const name = entry.name.toLowerCase();
     if (
@@ -48,6 +49,7 @@ export const refreshFolder = async (folder?: FileSystemDirectoryHandle) => {
       const previousEntry = previousEntries.get(entry.name);
       if (previousEntry) {
         if (await previousEntry.file.isSameEntry(entry)) {
+          newEntries.set(entry.name, previousEntry);
           continue;
         }
         if (previousEntry.objectUrl) {
@@ -59,6 +61,15 @@ export const refreshFolder = async (folder?: FileSystemDirectoryHandle) => {
         review: null,
         objectUrl: null,
       });
+    }
+  }
+  for await (const previousEntry of previousEntries.values()) {
+    if (!newEntries.has(previousEntry.file.name)) {
+      // New entries doesn't have the previously selected file
+      // Revoke objectURL
+      if (previousEntry.objectUrl) {
+        URL.revokeObjectURL(previousEntry.objectUrl);
+      }
     }
   }
   reviewPhotoStore.setState({ photoEntries: newEntries });

@@ -10,7 +10,7 @@ export default function PhotoReview({
   children: React.ReactNode;
 }) {
   return (
-    <div className="bg-gradient-to-b from-slate-900 to-black min-h-screen h-full text-white">
+    <div className="bg-gradient-to-b from-zinc-900 to-black min-h-screen h-full text-white">
       {children}
     </div>
   );

@@ -86,7 +86,7 @@ export const ReviewReason = ({
                             </RadioGroup.Label>
                             <RadioGroup.Description
                               as="span"
-                              className={`inline ${
+                              className={`inline font-thai ${
                                 checked ? "text-sky-100" : "text-gray-500"
                               }`}
                             >
