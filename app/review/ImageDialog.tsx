@@ -77,7 +77,7 @@ export default function ImageDialog({ images }: { images: string[] }) {
           />
         </div>
         {currentPhoto && (
-          <div className="relative max-h-screen overflow-y-auto flex-shrink-0 flex flex-col w-full max-w-md p-8 gap-2 h-screen bg-white bg-opacity-10 rounded-l-xl">
+          <div className="relative max-h-screen overflow-y-auto flex-shrink-0 flex flex-col w-full max-w-sm 2xl:max-w-md p-8 gap-2 h-screen bg-white bg-opacity-10 rounded-l-xl">
             <div className="absolute top-0 right-0 flex items-center gap-2 p-6 text-white">
               <button
                 onClick={() => handleClose()}

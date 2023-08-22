@@ -1,7 +1,7 @@
 import { Disclosure, RadioGroup } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { useEffect, useRef } from "react";
-import { PhotoEntry, PhotoReview, reviewPhotoStore } from "../store";
+import { PhotoEntry } from "../schema";
 import { Button, ButtonProps } from "./Button";
 
 export type ReviewReasonObject = {
@@ -87,7 +87,7 @@ export const ReviewReason = ({
                             <RadioGroup.Description
                               as="span"
                               className={`inline font-thai ${
-                                checked ? "text-sky-100" : "text-gray-500"
+                                checked ? "text-white" : "text-gray-500"
                               }`}
                             >
                               {reason.description}

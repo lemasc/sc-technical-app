@@ -26,21 +26,25 @@ const numberConstructor = coerce(number(), (value) => {
   return value as number;
 });
 
+export const APEX_FNumber = (number: number) => {
+  // Convert APEX units to readable human format (f/2.8)
+  const value = Math.round(10 * Math.pow(2, number / 2)) / 10;
+  return `f/${value.toFixed(1)}`;
+};
+
+export const APEX_ShutterSpeedValue = (number: number) => {
+  // Convert APEX units to readable human format (1/250)
+  const denominator = Math.pow(2, number);
+  return `1/${Math.round(denominator)} sec`;
+};
+
 export const ExifMetadata = object({
   Make: string(),
   Model: string(),
   DateTimeOriginal: dayjsDate,
   Software: optional(string()),
-  FNumber: transform(numberConstructor, (number) => {
-    // Convert APEX units to readable human format (f/2.8)
-    const value = Math.round(10 * Math.pow(2, number / 2)) / 10;
-    return `f/${value.toFixed(1)}`;
-  }),
-  ShutterSpeedValue: transform(number(), (number) => {
-    // Convert APEX units to readable human format (1/250)
-    const denominator = Math.pow(2, number);
-    return `1/${Math.round(denominator)} sec`;
-  }),
+  FNumber: numberConstructor,
+  ShutterSpeedValue: numberConstructor,
   ISOSpeedRatings: numberConstructor,
 });
 

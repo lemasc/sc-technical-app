@@ -2,7 +2,7 @@ import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import { useState } from "react";
 import { useSwipeable } from "react-swipeable";
-import { PhotoEntry } from "./store";
+import { PhotoEntry } from "./schema";
 
 export interface SharedModalProps {
   index: number;

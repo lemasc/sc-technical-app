@@ -5,7 +5,8 @@ import {
   XMarkIcon,
 } from "@heroicons/react/20/solid";
 import { useCallback } from "react";
-import { PhotoEntry, PhotoReview, setPhotoEntry } from "../store";
+import { setPhotoEntry } from "../store";
+import { PhotoEntry, PhotoReview } from "../schema";
 import { Button } from "./Button";
 import { ReviewReason } from "./ReviewReason";
 
@@ -94,6 +95,12 @@ export const ImageReview = ({ image }: { image: PhotoEntry }) => {
               "รูปภาพนี้คล้ายคลึงหรือซ้ำกับรูปอื่น ๆ ใน Collection นี้",
           },
           {
+            key: "bad-subject",
+            title: "Bad Subject",
+            description:
+              "ภาพนี้มีจุดเด่นหรือจุดสนใจที่ไม่ดี (จุดสนใจเบลอ จุดสนใจมีลักษณะหรือท่าทางไม่เหมาะสม ฯลฯ)",
+          },
+          {
             key: "bad-shooting",
             title: "Bad Shooting",
             description:
@@ -103,12 +110,6 @@ export const ImageReview = ({ image }: { image: PhotoEntry }) => {
             key: "bad-composition",
             title: "Bad Composition",
             description: "รูปภาพนี้องค์ประกอบไม่ดี",
-          },
-          {
-            key: "bad-subject",
-            title: "Bad Subject",
-            description:
-              "ภาพนี้มีจุดเด่นหรือจุดสนใจที่ไม่ดี (จุดสนใจเบลอ จุดสนใจมีลักษณะหรือท่าทางไม่เหมาะสม ฯลฯ)",
           },
           {
             key: "not-meaningful",

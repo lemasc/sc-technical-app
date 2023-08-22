@@ -1,19 +1,9 @@
 import EXIF from "exif-js";
 import { parse, ValiError } from "valibot";
 import { create } from "zustand";
-import { ExifMetadata, ExifMetadataType } from "./ExifMetadata";
+import { ExifMetadata } from "./ExifMetadata";
+import { PhotoEntry } from "./schema";
 
-export type PhotoReview = {
-  status: "approved" | "rejected" | "needs-editing";
-  reason?: string;
-};
-
-export type PhotoEntry = {
-  file: FileSystemFileHandle;
-  review: PhotoReview | null;
-  objectUrl: string | null;
-  metadata?: ExifMetadataType;
-};
 export type ReviewPhotoStoreType = {
   selectedFolder: FileSystemDirectoryHandle | null;
   photoEntries: Map<string, PhotoEntry>;

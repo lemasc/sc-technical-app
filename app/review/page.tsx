@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import Image from "next/image";
 import ImageDialog from "./ImageDialog";
 import { refreshFolder, reviewPhotoStore, setFolder } from "./store";
 import Thumbnail from "./Thumbnail";
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 import ReviewOptions from "./components/ReviewOptions";
+import { saveToLocalStorage } from "./storage/localStorage";
 
 const ListPage = () => {
   const selectedFolder = reviewPhotoStore((state) => state.selectedFolder);
@@ -27,22 +28,17 @@ const ListPage = () => {
     }
   };
 
+  const saveTimeout = useRef<NodeJS.Timeout>();
   useEffect(
     () =>
       reviewPhotoStore.subscribe((state) => {
-        if (state.selectedFolder && state.photoEntries) {
-          const key = `edit-${state.selectedFolder.name}`;
-          const existingChanges = JSON.parse(localStorage.getItem(key) ?? "{}");
-          const entries = Array.from(state.photoEntries.entries());
-          const changes = {
-            ...existingChanges,
-            [state.changesDate.toLocaleString()]: entries.map(
-              ([k, { review, metadata }]) => [k, { review, metadata }]
-            ),
-          };
-          console.log("✏️ Changes", changes);
-          localStorage.setItem(key, JSON.stringify(changes));
+        if (saveTimeout.current) {
+          clearTimeout(saveTimeout.current);
         }
+        saveTimeout.current = setTimeout(() => {
+          saveToLocalStorage(state);
+          saveTimeout.current = undefined;
+        }, 500);
       }),
     []
   );

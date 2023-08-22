@@ -1,4 +1,8 @@
-import { ExifMetadataType } from "../ExifMetadata";
+import {
+  APEX_FNumber,
+  APEX_ShutterSpeedValue,
+  ExifMetadataType,
+} from "../ExifMetadata";
 
 export const ImageMetadata = ({ metadata }: { metadata: ExifMetadataType }) => {
   return (
@@ -11,9 +15,9 @@ export const ImageMetadata = ({ metadata }: { metadata: ExifMetadataType }) => {
         <b className="mr-1">Date Time Taken:</b>
         <span>{metadata.DateTimeOriginal.toLocaleString()}</span>
         <b>Aperture:</b>
-        <span>{metadata.FNumber}</span>
+        <span>{APEX_FNumber(metadata.FNumber)}</span>
         <b>Shutter Speed:</b>
-        <span>{metadata.ShutterSpeedValue}</span>
+        <span>{APEX_ShutterSpeedValue(metadata.ShutterSpeedValue)}</span>
         <b>ISO:</b>
         <span>{metadata.ISOSpeedRatings}</span>
         {metadata.Software && (

@@ -48,9 +48,7 @@ const Thumbnail = ({ file }: { file: string }) => {
       {url && (
         <div>
           <Image
-            className={`transform aspect-[3/2] object-scale-down rounded-lg ${
-              reviewStatus ? "brightness-50" : "brightness-90"
-            } transition will-change-auto group-hover:brightness-100 group-hover:contrast-120`}
+            className={`transform aspect-[3/2] object-scale-down rounded-lg brightness-100 transition will-change-auto`}
             src={url}
             alt="Thumbnail"
             width={720}

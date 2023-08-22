@@ -3,7 +3,7 @@ import {
   PencilSquareIcon,
   XCircleIcon,
 } from "@heroicons/react/20/solid";
-import { PhotoReview } from "./store";
+import { PhotoReview } from "./schema";
 
 export const getIcon = (status?: PhotoReview["status"]) => {
   switch (status) {

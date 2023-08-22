@@ -6,49 +6,9 @@ import {
   CloudArrowDownIcon,
   CloudArrowUpIcon,
 } from "@heroicons/react/20/solid";
-import { PhotoEntry, reviewPhotoStore, setPhotoEntry } from "../store";
+import { importSettingsFromFile, exportSettingsToFile } from "../storage";
 
 export default function ReviewOptions() {
-  const importSettings = async () => {
-    try {
-      const [fileHandle] = await window.showOpenFilePicker({
-        // @ts-ignore
-        id: "importedSettings",
-        types: [
-          {
-            description: "JSON Settings",
-            accept: {
-              "application/json": [".json"],
-            },
-          },
-        ],
-      });
-      const data = await fileHandle.getFile();
-      // A json is an entries of [string, PhotoEntry]
-      const json = JSON.parse(await data.text());
-      const entiresMap = new Map<string, PhotoEntry>(json);
-      // Imported settings will based on the current revision
-      const { photoEntries } = reviewPhotoStore.getState();
-      let photosUpdated = 0;
-      for await (const [name, existing] of photoEntries) {
-        const settings = entiresMap.get(name);
-        if (settings && settings.review) {
-          // Merge the review settings
-          photosUpdated++;
-          setPhotoEntry({
-            ...existing,
-            review: settings.review,
-          });
-        }
-      }
-      alert(`Imported ${photosUpdated} of ${photoEntries.size} photos.`);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  const exportSettings = async () => {};
-
   return (
     <Menu as="div" className="relative inline-block text-left">
       <div>
@@ -77,7 +37,7 @@ export default function ReviewOptions() {
                   className={`${
                     active ? "bg-violet-500 text-white" : "text-gray-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  onClick={importSettings}
+                  onClick={importSettingsFromFile}
                 >
                   <CloudArrowUpIcon
                     className="mr-2 h-5 w-5"
@@ -93,7 +53,7 @@ export default function ReviewOptions() {
                   className={`${
                     active ? "bg-violet-500 text-white" : "text-gray-900"
                   } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
-                  onClick={exportSettings}
+                  onClick={exportSettingsToFile}
                 >
                   <CloudArrowDownIcon
                     className="mr-2 h-5 w-5"
