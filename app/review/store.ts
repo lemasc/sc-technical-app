@@ -9,6 +9,7 @@ export type ReviewPhotoStoreType = {
   photoEntries: Map<string, PhotoEntry>;
   selectedFile: string | null;
   changesDate: Date;
+  answerEntries?: Record<string, Pick<PhotoEntry, "review">>;
 };
 
 export const reviewPhotoStore = create<ReviewPhotoStoreType>((set, get) => ({
@@ -80,10 +81,19 @@ export const createMetadata = async (entry: PhotoEntry) => {
 };
 
 export const setPhotoEntry = async (entry: PhotoEntry) => {
-  reviewPhotoStore.setState({
-    photoEntries: new Map(reviewPhotoStore.getState().photoEntries).set(
-      entry.file.name,
-      entry
-    ),
+  reviewPhotoStore.setState((state) => ({
+    photoEntries: new Map(state.photoEntries).set(entry.file.name, entry),
+  }));
+};
+
+export const setPhotoEntries = async (entries: PhotoEntry[]) => {
+  reviewPhotoStore.setState((state) => {
+    const newEntries = new Map(state.photoEntries);
+    entries.forEach((value) => {
+      newEntries.set(value.file.name, value);
+    });
+    return {
+      photoEntries: newEntries,
+    };
   });
 };

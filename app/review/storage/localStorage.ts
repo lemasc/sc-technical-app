@@ -29,5 +29,4 @@ export const getRevisionFromLocalStorage = (state: ReviewPhotoStoreType) => {
   if (entry) {
     return entry;
   }
-  return importSettings(entry);
 };

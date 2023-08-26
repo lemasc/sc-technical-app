@@ -7,7 +7,6 @@ import {
   CloudArrowUpIcon,
 } from "@heroicons/react/20/solid";
 import { importSettingsFromFile, exportSettingsToFile } from "../storage";
-import { refreshFolder, reviewPhotoStore } from "../store";
 import { setRevision } from "../storage/revisions";
 
 export default function ReviewOptions() {

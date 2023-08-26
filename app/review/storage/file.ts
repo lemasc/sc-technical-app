@@ -1,3 +1,5 @@
+import { array, parse, string, tuple, ValiError } from "valibot";
+import { developSettings } from "../schema";
 import { reviewPhotoStore, setPhotoEntry } from "../store";
 import { importSettings } from "./settings";
 import { createSettings } from "./utils";
@@ -22,6 +24,35 @@ export const importSettingsFromFile = async () => {
     await importSettings(json);
   } catch (err) {
     console.error(err);
+  }
+};
+
+export const importAnswersFromFile = async () => {
+  try {
+    const [fileHandle] = await window.showOpenFilePicker({
+      // @ts-ignore
+      id: "importedSettings",
+      types: [
+        {
+          description: "JSON Settings",
+          accept: {
+            "application/json": [".json"],
+          },
+        },
+      ],
+    });
+    const data = await fileHandle.getFile();
+    // A json is an entries of [string, PhotoEntry]
+    const json = JSON.parse(await data.text());
+    const entries = parse(array(tuple([string(), developSettings])), json);
+    reviewPhotoStore.setState({
+      answerEntries: Object.fromEntries(entries as any),
+    });
+  } catch (err) {
+    console.error(err);
+    if (err instanceof ValiError) {
+      console.error(err.issues);
+    }
   }
 };
 
