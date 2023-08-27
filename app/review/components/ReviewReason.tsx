@@ -1,8 +1,9 @@
 import { Disclosure, RadioGroup } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/20/solid";
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { PhotoEntry } from "../schema";
 import { Button, ButtonProps } from "./Button";
+import { useSearchParams } from "next/navigation";
 
 export type ReviewReasonObject = {
   key: string;
@@ -28,21 +29,31 @@ const AutoClose = ({
   return null;
 };
 
+export type ReviewReasonProps = ButtonProps & {
+  reasons: ReviewReasonObject[];
+  image: PhotoEntry;
+  onChange?: (reason: ReviewReasonObject["key"]) => void;
+};
+
 export const ReviewReason = ({
   reasons,
   image,
   onChange,
   ...props
-}: ButtonProps & {
-  reasons: ReviewReasonObject[];
-  image: PhotoEntry;
-  onChange?: (reason: ReviewReasonObject["key"]) => void;
-}) => {
+}: ReviewReasonProps) => {
+  const reasonsToShow = useMemo(() => {
+    if (props.disabled) {
+      return reasons.filter((reason) => reason.key === image.review?.reason);
+    }
+    return reasons;
+  }, [props, image.review?.reason, reasons]);
   return (
     <Disclosure
       as={"div"}
       defaultOpen={props.variant === "primary"}
-      className={`rounded-b-lg bg-opacity-20 ${props.className["primary"]} w-full`}
+      className={`rounded-lg bg-opacity-20 ${props.className["primary"]} ${
+        props.disabled && props.variant !== "primary" ? "hidden" : "block"
+      } w-full`}
     >
       {({ open, close }) => (
         <>
@@ -62,7 +73,7 @@ export const ReviewReason = ({
           >
             <RadioGroup.Label>Select a reason:</RadioGroup.Label>
             <div className="flex flex-col gap-4">
-              {reasons.map((reason) => (
+              {reasonsToShow.map((reason) => (
                 <RadioGroup.Option
                   key={reason.key}
                   value={reason.key}
@@ -94,7 +105,7 @@ export const ReviewReason = ({
                             </RadioGroup.Description>
                           </div>
                         </div>
-                        {checked && (
+                        {checked && !props.disabled && (
                           <div className="shrink-0 text-white">
                             <CheckIcon className="h-6 w-6" />
                           </div>

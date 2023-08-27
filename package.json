@@ -33,6 +33,7 @@
     "zustand": "^4.4.1"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.244",
     "@types/wicg-file-system-access": "^2020.9.6"
   }
 }

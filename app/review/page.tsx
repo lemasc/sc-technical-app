@@ -8,12 +8,17 @@ import Thumbnail from "./Thumbnail";
 import { CloudArrowUpIcon } from "@heroicons/react/24/outline";
 import ReviewOptions from "./components/ReviewOptions";
 import { saveToLocalStorage } from "./storage/localStorage";
+import { useSearchParams } from "next/navigation";
 
 const ListPage = () => {
+  const searchParams = useSearchParams();
   const selectedFolder = reviewPhotoStore((state) => state.selectedFolder);
-  const photoEntryKeys = reviewPhotoStore((state) =>
-    Array.from(state.photoEntries.keys())
-  );
+  const photoEntryKeys = reviewPhotoStore((state) => {
+    if (searchParams.has("answer") && state.answerEntries) {
+      return Object.keys(state.answerEntries);
+    }
+    return Array.from(state.photoEntries.keys());
+  });
 
   const handleSelectFolder = async () => {
     try {

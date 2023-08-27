@@ -73,6 +73,7 @@ export default function SharedModal({
             )}
             {images && index + 1 < images.length && (
               <button
+                test-id="image-viewer-next-button"
                 className="absolute right-3 top-[calc(50%-16px)] rounded-full bg-black/50 p-3 text-white/75 backdrop-blur-lg transition hover:bg-black/75 hover:text-white focus:outline-none"
                 style={{ transform: "translate3d(0, 0, 0)" }}
                 onClick={() => changePhotoId(index + 1)}

@@ -2,6 +2,7 @@ import useKeypress from "@/utils/useKeyPress";
 import { Dialog } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/20/solid";
 import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ImageMetadata } from "./components/ImageMetadata";
 import { ImageReview } from "./components/ImageReview";
@@ -48,6 +49,12 @@ export default function ImageDialog({ images }: { images: string[] }) {
     }
   }, [currentPhoto]);
 
+  const answerEntry = reviewPhotoStore((state) =>
+    selectedFile ? state.answerEntries?.[selectedFile] : undefined
+  );
+  const searchParams = useSearchParams();
+  const isAnswerView = searchParams.has("answer");
+
   if (!currentPhoto) return null;
 
   return (
@@ -91,6 +98,16 @@ export default function ImageDialog({ images }: { images: string[] }) {
             </span>
             <h2 className="font-bold text-3xl">{currentPhoto.file.name}</h2>
             <ImageReview key={currentPhoto.file.name} image={currentPhoto} />
+            {isAnswerView && answerEntry && (
+              <ImageReview
+                isAnswerView
+                key={`${currentPhoto.file.name} review`}
+                image={{
+                  ...currentPhoto,
+                  review: answerEntry.review,
+                }}
+              />
+            )}
             {currentPhoto.metadata && (
               <ImageMetadata metadata={currentPhoto.metadata} />
             )}
