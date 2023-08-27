@@ -10,12 +10,24 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         currentWindow: true,
       });
       try {
-        const images = [];
+        chrome.action.setBadgeText({
+          text: "START",
+        });
+        await chrome.windows.update(tab.windowId, {
+          state: "fullscreen",
+        });
+        let index = 0;
         while (true) {
           const screenshot = await chrome.tabs.captureVisibleTab({
             format: "png",
           });
-          images.push(screenshot);
+          await chrome.tabs.sendMessage(tab.id, {
+            action: "saveImage",
+            image: {
+              name: `${++index}.png`,
+              url: screenshot,
+            },
+          });
           const result = await chrome.tabs.sendMessage(tab.id, {
             action: "clickNextImageIfExists",
           });
@@ -25,15 +37,19 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
           await wait(500);
         }
         console.log("end");
-        console.log(images);
-        sendResponse(images);
         chrome.action.setBadgeText({
           text: "END",
         });
+        setTimeout(() => {
+          chrome.action.setBadgeText({
+            text: "",
+          });
+        });
+        chrome.windows.update(tab.windowId, { state: "normal" });
       } catch (err) {
         console.error(err);
         chrome.action.setBadgeText({
-          text: "ERROR",
+          text: "ERR",
         });
       }
     })();

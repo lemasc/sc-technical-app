@@ -4,12 +4,12 @@ document.getElementById("captureBtn").addEventListener("click", () => {
       active: true,
       currentWindow: true,
     });
-    await chrome.windows.update(tab.windowId, { state: "fullscreen" });
+    //await chrome.windows.update(tab.windowId, { state: "fullscreen" });
     await new Promise((resolve) =>
       chrome.tabs.sendMessage(tab.id, { action: "capture-process" }, () =>
         resolve()
       )
     );
-    await chrome.windows.update(tab.windowId, { state: "normal" });
+    //await chrome.windows.update(tab.windowId, { state: "normal" });
   })();
 });
