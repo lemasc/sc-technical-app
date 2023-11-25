@@ -1,7 +1,6 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import { createCookie } from "@remix-run/node";
-import { parse } from "cookie";
 import { z } from "zod";
-import { session } from "./electron.server";
 
 export const PhotoEditSessionSchema = z.object({
   catalogPath: z.string().min(3),
@@ -19,6 +18,7 @@ export const getPhotoUserCookie = async (request: Request) => {
   let cookieString =
     request.headers.get("Cookie") ?? request.headers.get("Set-Cookie");
   if (process.env.ELECTRON === "1") {
+    const { session } = require("electron") as typeof import("electron");
     cookieString = (
       await session.defaultSession.cookies.get({ name: "photo-user" })
     )
@@ -35,6 +35,8 @@ export const setPhotoUserCookie = async (
     PhotoUserCookieSchema.parse(data)
   );
   if (process.env.ELECTRON === "1") {
+    const { session } = require("electron") as typeof import("electron");
+    const { parse } = require("cookie") as typeof import("cookie");
     const parsed = parse(cookie);
     await session.defaultSession.cookies.set({
       url: "http://localhost",
@@ -47,5 +49,3 @@ export const setPhotoUserCookie = async (
   }
   return cookie;
 };
-
-// TODO: Use file session instead of cookie session

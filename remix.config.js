@@ -1,3 +1,13 @@
+const { withEsbuildOverride } = require("remix-esbuild-override");
+
+withEsbuildOverride((option, { isServer, isDev }) => {
+  option.define = {
+    ...(option.define ?? {}),
+    "process.env.ELECTRON": JSON.stringify(process.env.ELECTRON ? "1" : "0"),
+  };
+  return option;
+});
+
 /** @type {import('@remix-run/dev').AppConfig} */
 module.exports = {
   ignoredRouteFiles: ["**/.*"],
