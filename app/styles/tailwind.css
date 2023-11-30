@@ -9,7 +9,8 @@
   h2 {
     @apply text-2xl font-bold;
   }
-  input[type="text"] {
+  input[type="text"],
+  select {
     @apply rounded bg-gray-50 border-gray-300 shadow-sm focus:border-gray-600 focus:ring-0;
   }
   label {

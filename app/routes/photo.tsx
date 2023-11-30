@@ -15,7 +15,7 @@ export const loader = async ({ request }: LoaderFunctionArgs) => {
 export default function PhotoLayout() {
   const data = useLoaderData<typeof loader>();
   return (
-    <div>
+    <div className="flex flex-col flex-1 min-h-screen h-full">
       <nav className="border-b p-4 flex items-center gap-4">
         <img src="/logo_sc.png" width={50} height={50} alt="Logo" />
         <b className="text-lg text-red-500">SC Technical App</b>
@@ -27,7 +27,7 @@ export default function PhotoLayout() {
           Sign out
         </button>
       </nav>
-      <main>
+      <main className="flex-1 flex h-full flex-col">
         <Outlet />
       </main>
     </div>

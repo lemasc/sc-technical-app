@@ -14,7 +14,7 @@ export const action: ActionFunction = async ({ request }) => {
     const cookie = await setPhotoUserCookie({
       name,
     });
-    return redirect("/photo/edit/session", {
+    return redirect("/photo/import", {
       headers: {
         "Set-Cookie": cookie,
       },

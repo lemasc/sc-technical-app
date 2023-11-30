@@ -9,9 +9,8 @@ let win;
 async function createWindow(url) {
   win = new BrowserWindow({
     show: false,
-    width: 600,
+    width: 1200,
     height: 800,
-    resizable: false,
     autoHideMenuBar: true,
   });
   win.webContents.setWindowOpenHandler(({ url }) => {
