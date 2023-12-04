@@ -1,9 +1,14 @@
+import type { Metadata } from "next";
+import { Noto_Sans_Thai, Sarabun } from "next/font/google";
 import "react-loading-skeleton/dist/skeleton.css";
 import "./globals.css";
-import type { Metadata } from "next";
-import { Inter, Sarabun } from "next/font/google";
 
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const noto_sans_thai = Noto_Sans_Thai({
+  subsets: ["thai"],
+  weight: ["400", "700"],
+  variable: "--font-noto-sans",
+});
+
 const sarabun = Sarabun({
   subsets: ["latin", "thai"],
   weight: ["400", "700"],
@@ -23,7 +28,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${inter.className} ${sarabun.variable}`}
+        className={`font-sans ${noto_sans_thai.variable}  ${sarabun.variable}`}
       >
         {children}
       </body>
