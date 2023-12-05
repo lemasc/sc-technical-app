@@ -8,6 +8,7 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     CODA_API_KEY: z.string().min(1),
     CODA_DOC_ID: z.string().min(1),
+    NEXTAUTH_URL: z.string().min(1),
   },
   runtimeEnv: {
     GDRIVE_API_KEY: process.env.GDRIVE_API_KEY,
@@ -15,5 +16,6 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     CODA_API_KEY: process.env.CODA_API_KEY,
     CODA_DOC_ID: process.env.CODA_DOC_ID,
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL,
   },
 });

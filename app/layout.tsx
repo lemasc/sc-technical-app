@@ -11,7 +11,7 @@ const noto_sans_thai = Noto_Sans_Thai({
 
 const sarabun = Sarabun({
   subsets: ["latin", "thai"],
-  weight: ["400", "700"],
+  weight: ["400", "500", "700"],
   variable: "--font-sarabun",
 });
 

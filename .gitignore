@@ -36,3 +36,6 @@ next-env.d.ts
 
 results/*
 !results/index.ts
+
+*.db
+*.db-journal
