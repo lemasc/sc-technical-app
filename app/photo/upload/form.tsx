@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 
 import { Combobox } from "@/components/composites/combobox";
 import { DatePicker } from "@/components/composites/date-picker";
-import { Button } from "@/components/ui/button";
+import { LoadingButton } from "@/components/composites/loading-button";
 import {
   Form,
   FormDescription,
@@ -14,29 +14,37 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/components/ui/use-toast";
+import { useOverlayState } from "@/utils/overlay-state";
 import { Worker } from "@/utils/sports-db/workers";
+import { useRouter } from "next/navigation";
+import { createUploadSession } from "./action";
 import { UploadFormSchema, uploadformSchema } from "./schema";
-//import { toast } from "@/components/ui/use-toast";
 
 export function UploadForm({
   photographers,
 }: {
   photographers: Worker<"ONSITE">[];
 }) {
+  const router = useRouter();
+  const { toast } = useToast();
   const form = useForm<UploadFormSchema>({
     resolver: zodResolver(uploadformSchema),
   });
 
-  function onSubmit(data: UploadFormSchema) {
-    console.log(data);
-    /*toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });*/
+  const submitting = useOverlayState((state) => state.preventClose);
+
+  async function onSubmit(data: UploadFormSchema) {
+    try {
+      useOverlayState.setState({ preventClose: true });
+      const { id } = await createUploadSession(data);
+      router.push(`/photo/upload/${id}`);
+      useOverlayState.setState({ preventClose: false, open: false });
+    } catch (err) {
+      let description = err instanceof Error ? err.message : "Unknown error";
+      toast({ title: "Error", description });
+      useOverlayState.setState({ preventClose: false });
+    }
   }
 
   return (
@@ -84,7 +92,9 @@ export function UploadForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <LoadingButton disabled={submitting} type="submit">
+          Submit
+        </LoadingButton>
       </form>
     </Form>
   );

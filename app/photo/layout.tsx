@@ -1,4 +1,5 @@
 import { UserProfileBar } from "@/components/auth/UserProfileBar";
+import { Toaster } from "@/components/ui/toaster";
 import { auth as nextAuth } from "@/utils/auth";
 import Image from "next/image";
 import { lazy, Suspense } from "react";
@@ -36,10 +37,11 @@ export default async function PhotoReviewLayout({
             {browser}
           </aside>
         )}
-        <main className="bg-white rounded-lg flex-grow px-6 py-8 m-4">
+        <main className="bg-white flex-grow px-6 py-8 m-4 overflow-y-auto h-[85vh]">
           {children}
         </main>
       </div>
+      <Toaster />
     </div>
   );
 }
