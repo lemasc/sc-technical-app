@@ -1,10 +1,23 @@
 import { UserProfileBar } from "@/components/auth/UserProfileBar";
 import { Toaster } from "@/components/ui/toaster";
 import { auth as nextAuth } from "@/utils/auth";
+import type { Metadata } from "next";
 import Image from "next/image";
 import { lazy, Suspense } from "react";
 
 const UploadDialog = lazy(() => import("./upload/dialog"));
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | SC Technical App",
+    default: "SC Technical App",
+  },
+  openGraph: {
+    title: "SC Technical App",
+    description:
+      "Manage all photos and videos remotely with ease. Use internally for Satit Phanakhon Communication Club only.",
+  },
+};
 
 export default async function PhotoReviewLayout({
   children,

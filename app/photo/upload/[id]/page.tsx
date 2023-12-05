@@ -1,9 +1,15 @@
 import { Button } from "@/components/ui/button";
 import { env } from "@/env.mjs";
 import { prisma } from "@/utils/prisma";
+import { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { UploadButton } from "./upload-button";
 import UploadList from "./upload-component";
+
+export const metadata: Metadata = {
+  title: "Upload Session",
+};
+
 export default async function UploadSessionPage({
   params,
 }: {
