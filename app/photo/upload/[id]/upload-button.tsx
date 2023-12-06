@@ -2,26 +2,16 @@
 
 import { Plus } from "lucide-react";
 import { useEffect } from "react";
+import { acceptType } from "./accept-type";
 import { useUploadQueue } from "./upload-queue";
 
-const acceptType: Record<string, string[]> = {
-  "image/jpg": [".jpg", ".jpeg"],
-  "image/x-canon-crw": [".crw"],
-  "image/x-canon-cr2": [".cr2"],
-  "image/x-canon-cr3": [".cr3"],
-  "image/x-nikon-nef": [".nef"],
-  "image/x-sony-arw": [".arw"],
-  "image/x-fuji-raf": [".raf"],
-  "image/webp": [".webp"],
-};
-
-export const UploadButton = ({ id }: { id: string }) => {
+export const UploadButton = () => {
   const selectFilesAndUpload = async () => {
     try {
       const files = await window
         .showOpenFilePicker({
           multiple: true,
-          types: [{ description: "Images", accept: acceptType }],
+          types: [{ description: "Images", accept: acceptType as any }],
         })
         .catch(() => [] as FileSystemFileHandle[]);
       useUploadQueue.getState().add(files);

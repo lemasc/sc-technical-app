@@ -11,6 +11,7 @@ export type UploadQueueItem = {
 };
 
 type UploadQueueStore = {
+  setId: string;
   queue: UploadQueueItem[];
   add: (files: FileSystemFileHandle[]) => void;
   remove: (id: string) => void;
@@ -19,6 +20,7 @@ type UploadQueueStore = {
 };
 
 export const useUploadQueue = create<UploadQueueStore>((set, get) => ({
+  setId: "",
   queue: [],
   add: (files) => {
     set((state) => {
