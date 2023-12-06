@@ -31,12 +31,19 @@ function UploadComponent({ fileId }: { fileId: string; id: string }) {
             file.status === "error" ? "bg-red-50" : "bg-slate-100"
           } min-h-[200px] w-full h-full flex flex-col gap-3 items-center justify-center`}
         >
+          {file.status === "pending" && (
+            <>
+              <Loader2 className="h-8 w-8 animate-spin" />
+              <span className="text-xs">Waiting...</span>
+            </>
+          )}
           {file.status === "uploading" && (
             <>
               <Loader2 className="h-8 w-8 animate-spin" />
               <span className="text-xs">
-                Uploading...{" "}
-                {file.progress !== -1 &&
+                {file.progress === 1 ? "Processing" : "Uploading"}...{" "}
+                {file.progress >= 0 &&
+                  file.progress < 1 &&
                   `(${Math.floor(file.progress * 100)}%)`}
               </span>
             </>

@@ -1,8 +1,9 @@
-import { Button } from "@/components/ui/button";
 import { env } from "@/env.mjs";
 import { prisma } from "@/utils/prisma";
+import { format } from "date-fns";
 import { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { RightHeader } from "./header";
 import { UploadButton } from "./upload-button";
 import UploadList from "./upload-component";
 
@@ -27,18 +28,15 @@ export default async function UploadSessionPage({
     <div className="divide-y space-y-4">
       <div className="flex flex-row gap-2">
         <div className="flex flex-col flex-grow gap-3">
-          <h1>{photo.name} : Upload Session</h1>
+          <h1>Upload Session</h1>
           <div className="flex flex-col gap-1 text-sm">
-            <span>Created at: {photo.createdAt.toISOString()}</span>
-            <span>Updated at: {photo.updatedAt.toISOString()}</span>
+            <span>Photographer: {photo.name}</span>
+            <span>
+              Selected taken date: {format(photo.takenAt, "dd MMMM yyyy")}
+            </span>
           </div>
         </div>
-        <div className="gap-4 flex flex-col">
-          <b className="text-2xl font-semibold">
-            {photo.photos.length ?? "0"} images
-          </b>
-          <Button className="font-semibold">Submit</Button>
-        </div>
+        <RightHeader />
       </div>
       <div className="py-4 grid xl:grid-cols-4 gap-4">
         <UploadButton />

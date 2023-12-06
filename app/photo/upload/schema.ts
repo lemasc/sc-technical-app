@@ -2,6 +2,7 @@ import * as z from "zod";
 
 export const uploadformSchema = z.object({
   photographer: z.string(),
+  event: z.string(),
   date: z.date(),
 });
 

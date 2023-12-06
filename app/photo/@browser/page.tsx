@@ -1,37 +1,18 @@
-/*function DayBrowser() {
-  return (
-    <div>
-      <div className="font-semibold text-sm pl-12 py-3 rounded-r-lg bg-slate-200">
-        December 4
-      </div>
-      <ul className="pl-16 py-3 space-y-6 text-sm">
-        <li>พิธีเปิด/พิธีปิด</li>
-        <li>ฟุตบอล</li>
-        <li>พิธีเปิด/พิธีปิด</li>
-        <li>ฟุตบอล</li>
-        <li>พิธีเปิด/พิธีปิด</li>
-        <li>ฟุตบอล</li>
-        <li>พิธีเปิด/พิธีปิด</li>
-        <li>ฟุตบอล</li>
-      </ul>
-    </div>
-  );
-}
+import { prisma } from "@/utils/prisma";
+import { DayBrowser } from "./day-browser";
 
-*/
-function PhotoBrowser() {
-  return (
-    <div className="flex flex-col gap-2">
-      <span className="text-sm font-medium pl-8 text-muted-foreground">
-        On Cloud
-      </span>
-    </div>
-  );
-}
-export default function Browser() {
+export default async function Browser() {
+  const group = await prisma.photoSet.groupBy({
+    by: ["takenAt"],
+    orderBy: {
+      takenAt: "asc",
+    },
+  });
   return (
     <div className="space-y-4 h-[91vh] py-4 pr-8 overflow-y-auto">
-      <PhotoBrowser />
+      {group.map(({ takenAt }) => (
+        <DayBrowser key={takenAt.toISOString()} day={takenAt} />
+      ))}
     </div>
   );
 }

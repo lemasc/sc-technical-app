@@ -8,23 +8,29 @@ import { DatePicker } from "@/components/composites/date-picker";
 import { LoadingButton } from "@/components/composites/loading-button";
 import {
   Form,
+  FormControl,
   FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { useToast } from "@/components/ui/use-toast";
 import { useOverlayState } from "@/utils/overlay-state";
+import { Sport } from "@/utils/sports-db/getSports";
 import { Worker } from "@/utils/sports-db/workers";
 import { useRouter } from "next/navigation";
 import { createUploadSession } from "./action";
+import { EventSelectRadioGroup } from "./events-select";
 import { UploadFormSchema, uploadformSchema } from "./schema";
 
 export function UploadForm({
   photographers,
+  sports,
 }: {
   photographers: Worker<"ONSITE">[];
+  sports: Sport[];
 }) {
   const router = useRouter();
   const { toast } = useToast();
@@ -82,11 +88,33 @@ export function UploadForm({
                 onSelect={field.onChange}
                 initialFocus
                 disabled={(date) => {
-                  return new Date("2023-12-04") >= date;
+                  return !(
+                    new Date("2023-12-05") < date &&
+                    new Date("2023-12-08") > date
+                  );
                 }}
               />
               <FormDescription>
                 Date that this photographer has shot the photo set.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="event"
+          render={({ field, formState }) => (
+            <FormItem className="space-y-3">
+              <FormLabel>Event</FormLabel>
+              <ScrollArea className="h-[300px] w-full rounded-md border py-4 pl-4 pr-6">
+                <FormControl>
+                  <EventSelectRadioGroup field={field} sports={sports} />
+                </FormControl>
+              </ScrollArea>{" "}
+              <FormDescription>
+                Event that this photo set is taken at. If there are multiple
+                events, please upload them separately.
               </FormDescription>
               <FormMessage />
             </FormItem>
