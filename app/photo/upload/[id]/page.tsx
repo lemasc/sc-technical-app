@@ -40,7 +40,7 @@ export default async function UploadSessionPage({
           <Button className="font-semibold">Submit</Button>
         </div>
       </div>
-      <div className="py-4 grid grid-cols-4 gap-4">
+      <div className="py-4 grid xl:grid-cols-4 gap-4">
         <UploadButton />
         <UploadList id={params.id} />
       </div>

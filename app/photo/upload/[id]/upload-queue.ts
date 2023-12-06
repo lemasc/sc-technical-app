@@ -1,6 +1,7 @@
+import { Photo } from "@prisma/client";
 import { create } from "zustand";
 
-export const MAX_UPLOAD_QUEUE = 1;
+export const MAX_UPLOAD_QUEUE = 5;
 
 export type UploadQueueItem = {
   id: string;
@@ -8,6 +9,7 @@ export type UploadQueueItem = {
   status: "pending" | "uploading" | "done" | "error";
   progress: number;
   error?: string;
+  data?: Photo;
 };
 
 type UploadQueueStore = {

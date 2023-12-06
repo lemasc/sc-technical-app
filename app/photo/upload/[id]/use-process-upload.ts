@@ -19,18 +19,23 @@ axiosRetry(uploadRequest, {
 const uploadImage = async (file: File, setId: string) => {
   const formData = new FormData();
   formData.append("file", file);
-  return uploadRequest.post(`/photo/upload/${setId}/file`, formData, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-    onUploadProgress: (progressEvent) => {
-      if (progressEvent.progress) {
-        useUploadQueue.getState().update(file.name, {
-          progress: progressEvent.progress,
-        });
-      }
-    },
-  });
+  const { data } = await uploadRequest.post(
+    `/photo/upload/${setId}/file`,
+    formData,
+    {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+      onUploadProgress: (progressEvent) => {
+        if (progressEvent.progress) {
+          useUploadQueue.getState().update(file.name, {
+            progress: progressEvent.progress,
+          });
+        }
+      },
+    }
+  );
+  return data;
 };
 
 export const useProcessUpload = (id: string) => {
@@ -55,9 +60,10 @@ export const useProcessUpload = (id: string) => {
                 .getState()
                 .update(next.id, { status: "uploading" });
               const file = await next.file.getFile();
-              const response = (await uploadImage(file, setId)).data;
-              console.log(response);
-              useUploadQueue.getState().update(next.id, { status: "done" });
+              const { data } = await uploadImage(file, setId);
+              useUploadQueue
+                .getState()
+                .update(next.id, { status: "done", data });
             } catch (err) {
               console.error(err);
               useUploadQueue.getState().update(next.id, { status: "error" });

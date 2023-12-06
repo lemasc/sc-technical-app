@@ -27,7 +27,7 @@ export const UploadButton = () => {
   return (
     <button
       onClick={selectFilesAndUpload}
-      className="border-2 gap-2 text-sm bg-slate-50 hover:bg-slate-100 border-dashed p-4 flex items-center justify-center flex-col"
+      className="w-full min-h-[200px] border-2 gap-2 text-sm bg-slate-50 hover:bg-slate-100 border-dashed p-4 flex items-center justify-center flex-col"
     >
       <Plus className="w-8 h-8" />
       <span>Upload</span>

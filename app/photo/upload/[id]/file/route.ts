@@ -2,6 +2,8 @@ import { prisma } from "@/utils/prisma";
 import { createS3Key, uploadImage } from "@/utils/sports-db/file";
 import exifr from "exifr";
 import { NextRequest, NextResponse } from "next/server";
+import path from "path";
+import sharp from "sharp";
 import { ExifData } from "../exif";
 
 export const POST = async (
@@ -16,28 +18,42 @@ export const POST = async (
     const fileData = new Uint8Array(await file.arrayBuffer());
     const pick: Array<keyof ExifData> = ["DateTimeOriginal", "Model"];
     const exifData: ExifData = await exifr.parse(fileData, {
-      pick,
+      exif: true,
     });
     console.log(exifData);
-    const key = createS3Key({ fileName: file.name, photoSetId: id });
-    await uploadImage(key, fileData);
-    await prisma.photoSet.update({
-      where: {
-        id: id,
-      },
+    const fileNameWithoutExt = path.basename(
+      new Date().valueOf() + "_" + file.name,
+      path.extname(file.name)
+    );
+    const key = createS3Key({ fileName: fileNameWithoutExt, photoSetId: id });
+    const resizedImage = await sharp(fileData)
+      .resize(1920, 1280, {
+        fit: "inside",
+      })
+      .rotate()
+      .webp({ preset: "photo" })
+      .withMetadata()
+      .toBuffer();
+    await Promise.all([
+      uploadImage(key + ".jpg", fileData),
+      uploadImage(key + ".webp", resizedImage),
+    ]);
+    const data = await prisma.photo.create({
       data: {
-        photos: {
-          create: {
-            dateTaken: exifData.DateTimeOriginal,
-            model: exifData.Model,
-            name: file.name,
-            url: key,
+        dateTaken: exifData.DateTimeOriginal ?? new Date(0),
+        model: exifData.Model,
+        name: fileNameWithoutExt,
+        url: key,
+        photoSet: {
+          connect: {
+            id: id,
           },
         },
       },
     });
+    console.log(data);
     // const url = await getPresignedImageUrl(key);
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true, data });
   } catch (err) {
     console.error(err);
     return NextResponse.json({ success: true }, { status: 500 });
