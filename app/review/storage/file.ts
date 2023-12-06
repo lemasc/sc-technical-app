@@ -1,6 +1,6 @@
 import { array, parse, string, tuple, ValiError } from "valibot";
 import { developSettings } from "../schema";
-import { reviewPhotoStore, setPhotoEntry } from "../store";
+import { reviewPhotoStore } from "../store";
 import { importSettings } from "./settings";
 import { createSettings } from "./utils";
 

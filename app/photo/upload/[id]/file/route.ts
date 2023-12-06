@@ -13,14 +13,12 @@ export const POST = async (
   try {
     const form = await req.formData();
     const file = form.get("file") as File;
-    console.log(file);
     if (file.type !== "image/jpeg") throw new Error("Invalid file type");
     const fileData = new Uint8Array(await file.arrayBuffer());
     const pick: Array<keyof ExifData> = ["DateTimeOriginal", "Model"];
     const exifData: ExifData = await exifr.parse(fileData, {
       exif: true,
     });
-    console.log(exifData);
     const fileNameWithoutExt = path.basename(
       new Date().valueOf() + "_" + file.name,
       path.extname(file.name)
@@ -51,7 +49,6 @@ export const POST = async (
         },
       },
     });
-    console.log(data);
     // const url = await getPresignedImageUrl(key);
     return NextResponse.json({ success: true, data });
   } catch (err) {

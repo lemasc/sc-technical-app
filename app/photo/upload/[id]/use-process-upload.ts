@@ -51,7 +51,6 @@ export const useProcessUpload = (id: string) => {
       useUploadQueue.subscribe(({ queue, setId }) => {
         const uploading = queue.filter((item) => item.status === "uploading");
         const pending = queue.filter((item) => item.status === "pending");
-        console.log(queue, pending, uploading);
         if (uploading.length < MAX_UPLOAD_QUEUE && pending.length > 0) {
           (async () => {
             const next = pending[0];
